@@ -14,7 +14,7 @@ app.use(express.json())
 app.use('/api', require('./routes'))
 
 
-app.use(express.static('public'))
+app.use('/api/public', express.static('public'))
 
 
 app.listen(3000, () => {
