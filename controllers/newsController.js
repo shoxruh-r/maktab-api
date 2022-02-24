@@ -62,7 +62,7 @@ exports.update = async (req, res) => {
         const success = News.findByIdAndUpdate(req.params.id, req.body)
 
         if (file)
-            fs.unlink(path.join(__dirname, '../public', image), e => {
+            fs.unlink(path.join(__dirname, '../public/images', image), e => {
                 if (e) throw e
             })
 
@@ -78,7 +78,7 @@ exports.delete = async (req, res) => {
         const { image } = News.findByIdAndDelete(req.params.id)
 
         if (image)
-            fs.unlink(path.join(__dirname, '../public', image), e => {
+            fs.unlink(path.join(__dirname, '../public/images', image), e => {
                 if (e) throw e
 
                 res.json({ success: true })

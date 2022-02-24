@@ -1,4 +1,4 @@
 const multer = require('multer')
 
 
-module.exports = multer({ dest: 'public' })
+module.exports = multer({ dest: 'public/images' })
