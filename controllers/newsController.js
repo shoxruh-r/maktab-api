@@ -50,6 +50,12 @@ exports.update = async (req, res) => {
         const { file } = req
 
         if (file) {
+            const { image } = News.findById(req.params.id)
+
+            fs.unlink(path.join(__dirname, '../public', image), e => {
+                if (e) throw e
+            })
+
             await sharp(file.path)
                 .webp({ quality: 65 })
                 .toFile(file.path + '.webp')
@@ -60,12 +66,6 @@ exports.update = async (req, res) => {
         }
 
         const success = News.findByIdAndUpdate(req.params.id, req.body)
-
-        if (file)
-            fs.unlink(path.join(__dirname, '../public', image), e => {
-                if (e) throw e
-            })
-
         res.json({ success })
     } catch (e) {
         res.status(400).json({ success: false })
@@ -75,14 +75,15 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        const { image } = News.findByIdAndDelete(req.params.id)
+        const { image } = News.findById(req.params.id)
 
         if (image)
             fs.unlink(path.join(__dirname, '../public', image), e => {
                 if (e) throw e
-
-                res.json({ success: true })
             })
+
+        const success = News.findByIdAndDelete(req.params.id)
+        res.json({ success })
     } catch (e) {
         res.status(400).json({ success: false })
     }
