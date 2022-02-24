@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-const { ObjectId } = require('mongoose').Types
 
 
 module.exports = (req, res, next) => {
@@ -9,12 +8,11 @@ module.exports = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
+        console.log(decoded)
         
-        if (ObjectId.isValid(decoded._id)) next()
+        if (decoded.login && decoded.password) next()
         else res.status(401).json({ success: false })
     } catch (e) {
-        return res.status(401).json({
-            success: false
-        })
+        return res.status(401).json({ success: false })
     }
 }

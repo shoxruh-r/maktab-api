@@ -12,40 +12,35 @@ exports.create = async (req, res) => {
             .webp({ quality: 65 })
             .toFile(file.path + '.webp')
 
-        fs.unlink(file.path, e => {
-            if (e) throw e
-        })
+        fs.unlink(file.path, e => { if (e) throw e })
 
         req.body.image = file.filename + '.webp'
 
-        const data = new News(req.body)
-        await data.save()
-        res.status(201).json({ success: true })
+        const success = News.save(req.body)
+        res.status(201).json({ success })
     } catch (e) {
         res.status(400).json({ success: false })
-        console.error(e)
     }
 }
 
 
 exports.readAll = async (req, res) => {
     try {
-        const data = await News.find({}, { title: 1, image: 1 })
-        res.json({ success: true, data })
+        const data = await News.find()
+        console.log(data)
+        res.json({ success: true, data: data })
     } catch (e) {
         res.status(400).json({ success: false })
-        console.error(e)
     }
 }
 
 
 exports.read = async (req, res) => {
     try {
-        const data = await News.findById(req.params.id, { __v: 0 })
+        const data = News.findById(req.params.id)
         res.json({ success: true, data })
     } catch (e) {
         res.status(400).json({ success: false })
-        console.error(e)
     }
 }
 
@@ -59,40 +54,36 @@ exports.update = async (req, res) => {
                 .webp({ quality: 65 })
                 .toFile(file.path + '.webp')
 
-            fs.unlink(file.path, e => {
-                if (e) throw e
-            })
+            fs.unlink(file.path, e => { if (e) throw e })
 
             req.body.image = file.filename + '.webp'
         }
 
-        const { image } = await News.findByIdAndUpdate(req.params.id, req.body)
+        const success = News.findByIdAndUpdate(req.params.id, req.body)
 
         if (file)
-            fs.unlink(path.join(__dirname, '../../public/images', image), e => {
+            fs.unlink(path.join(__dirname, '../public', image), e => {
                 if (e) throw e
             })
 
-        res.json({ success: true })
+        res.json({ success })
     } catch (e) {
         res.status(400).json({ success: false })
-        console.error(e)
     }
 }
 
 
 exports.delete = async (req, res) => {
     try {
-        const { image } = await News.findByIdAndDelete(req.params.id)
+        const { image } = News.findByIdAndDelete(req.params.id)
 
         if (image)
-            fs.unlink(path.join(__dirname, '../../public/images', image), e => {
+            fs.unlink(path.join(__dirname, '../public', image), e => {
                 if (e) throw e
 
                 res.json({ success: true })
             })
     } catch (e) {
         res.status(400).json({ success: false })
-        console.error(e)
     }
 }

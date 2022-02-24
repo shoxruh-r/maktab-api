@@ -1,9 +1,14 @@
-const { Schema, model } = require('mongoose')
+const fs = require('fs')
+const path = require('path')
 
 
-const schema = new Schema({
-    info: String
-}, { collection: 'info' })
+module.exports = {
+    findOne() {
+        return fs.readFileSync(path.join(__dirname, './databases/info.txt'), { encoding: 'utf8' })
+    },
 
-
-module.exports = model('Info', schema)
+    updateOne(text) {
+        fs.writeFileSync(path.join(__dirname, './databases/info.txt'), text)
+        return true
+    }
+}

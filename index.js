@@ -1,14 +1,6 @@
 const express = require('express')
-const { connect } = require('mongoose')
 const cors = require('cors')
 require('dotenv').config()
-
-
-const { DB_URI } = process.env
-connect(DB_URI)
-    .then(() => {
-        console.log("Baza ulandi!")
-    })
 
 
 const app = express()

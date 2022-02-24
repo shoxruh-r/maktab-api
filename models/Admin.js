@@ -1,10 +1,11 @@
-const { Schema, model } = require('mongoose')
+const fs = require('fs')
+const path = require('path')
 
 
-const schema = new Schema({
-    login: String,
-    password: String
-}, { collection: 'admins' })
-
-
-module.exports = model('Token', schema)
+module.exports = {
+    compare(object) {
+        let document = fs.readFileSync(path.join(__dirname, './databases/admin.json'), {encoding:'utf8'})
+        document = JSON.parse(document)
+        return document.login === object.login && document.password === object.password
+    }
+}
