@@ -27,7 +27,6 @@ exports.create = async (req, res) => {
 exports.readAll = async (req, res) => {
     try {
         const data = await News.find()
-        console.log(data)
         res.json({ success: true, data: data })
     } catch (e) {
         res.status(400).json({ success: false })
@@ -49,7 +48,7 @@ exports.update = async (req, res) => {
     try {
         const { file } = req
 
-        if (file) {
+        if (file && file.filename) {
             const { image } = News.findById(req.params.id)
 
             fs.unlink(path.join(__dirname, '../public', image), e => {

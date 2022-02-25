@@ -24,7 +24,12 @@ module.exports = {
     findByIdAndUpdate(id, object) {
         let document = fs.readFileSync(path.join(__dirname, './databases/news.json'), { encoding: 'utf8' })
         document = JSON.parse(document)
-        document[id] = object
+
+        if (object.image) document[id].image = object.image
+        
+        document[id].title = object.title
+        document[id].text = object.text
+        
         fs.writeFileSync(path.join(__dirname, './databases/news.json'), JSON.stringify(document))
         return true
     },
